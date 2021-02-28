@@ -960,6 +960,17 @@ CheckpointerShmemInit(void)
 void
 RequestCheckpoint(int flags)
 {
+  /*
+   * ignoring user requested checkpoints for now
+   */
+  if(!(flags & CHECKPOINT_CAUSE_XLOG))
+  {
+    ereport(WARNING,
+            (errmsg("CHECKPOINT will be ignored")));
+     return;
+  }
+
+
 	int			ntries;
 	int			old_failed,
 				old_started;
